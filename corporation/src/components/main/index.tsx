@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import Block from "./Block";
 
 const Main = () => {
   const navigate = useNavigate();
@@ -17,7 +18,16 @@ const Main = () => {
         </TitleWrapper>
         <WriteButton onClick={onClickWrite}>채용의뢰서 작성하기</WriteButton>
       </TitleContainer>
-      <ApplicantList></ApplicantList>
+      <ApplicantList>
+        <Block />
+        <Block />
+        <Block />
+        <Block />
+        <Block />
+        <Block />
+        <Block />
+        <Block />
+      </ApplicantList>
     </Wrapper>
   );
 };
@@ -65,8 +75,9 @@ const WriteButton = styled.button`
 `;
 
 const ApplicantList = styled.div`
+  margin-top: 30px;
+  width: 1150px;
   display: flex;
-  flex-direction: column;
   flex-wrap: wrap;
   gap: 40px;
 `;
