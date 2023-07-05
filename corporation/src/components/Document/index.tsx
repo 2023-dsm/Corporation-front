@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 interface GetData {
@@ -13,6 +13,7 @@ interface GetData {
 }
 
 const Document = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState<GetData>({
     address: "",
     age: 0,
@@ -57,6 +58,7 @@ const Document = () => {
       )
       .then((res) => {
         alert("지원자의 면접을 진행합니다.");
+        navigate("/main");
         console.log(res);
       })
       .catch((err) => console.log(err));

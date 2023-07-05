@@ -1,13 +1,32 @@
 import styled from "styled-components";
 import logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+interface GetData {
+  company_name: string;
+}
 
 const Headers = () => {
+  const [data, setData] = useState("");
   const navigate = useNavigate();
 
   const onClickLogo = () => {
     navigate("/main");
   };
+
+  useEffect(() => {
+    axios
+      .get<GetData>(`http://192.168.1.149:8080/company/info`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      })
+      .then((res) => {
+        setData(res.data.company_name);
+      });
+  }, []);
 
   return (
     <Wrapper>
@@ -15,7 +34,7 @@ const Headers = () => {
         <img width={60} src={logo} alt="" />
         <p>고수들의 직장</p>
       </LogoWrapper>
-      <ComponyTitle>기업 이름</ComponyTitle>
+      <ComponyTitle>{data}</ComponyTitle>
     </Wrapper>
   );
 };
@@ -27,7 +46,7 @@ const Wrapper = styled.header`
   width: 100%;
   height: 40px;
   padding: 20px;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
   background: #fcfcfc;
   border-bottom: 1px solid #008000;
 `;
