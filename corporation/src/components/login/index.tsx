@@ -1,11 +1,17 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Link } from "react-router-dom";
+
+interface ILogin {
+  access_token: string;
+}
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
-    id: "",
+    user_id: "",
     password: "",
   });
   const navigate = useNavigate();
@@ -16,7 +22,13 @@ const Login = () => {
   };
 
   const onClickLogin = () => {
-    navigate("/main");
+    axios
+      .post<ILogin>("http://192.168.1.149:8080/company/login", { ...loginData })
+      .then((res) => {
+        console.log(res);
+        localStorage.setItem("access_token", res.data.access_token);
+        navigate("/main");
+      });
   };
 
   return (
@@ -27,7 +39,7 @@ const Login = () => {
           <p>id</p>
           <input
             onChange={onChangeInput}
-            name="id"
+            name="user_id"
             placeholder="id를 입력해주세요"
           />
         </InputContainer>
@@ -59,7 +71,7 @@ const LoginContainer = styled.div`
   justify-content: center;
 `;
 
-const LoginWrapper = styled.form`
+const LoginWrapper = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;

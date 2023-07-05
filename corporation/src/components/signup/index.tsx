@@ -1,11 +1,12 @@
+import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const SignUp = () => {
   const [signData, setSignData] = useState({
-    compony: "",
-    id: "",
+    compony_name: "",
+    user_id: "",
     password: "",
   });
   const navigate = useNavigate();
@@ -13,10 +14,18 @@ const SignUp = () => {
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setSignData({ ...signData, [name]: value });
+    console.log(signData);
   };
 
   const onClickSign = () => {
-    navigate("/");
+    console.log("1", signData);
+    axios
+      .post("http://192.168.1.149:8080/company/signup", { ...signData })
+      .then(() => {
+        alert("회원가입에 성공하셨습니다.");
+        navigate("/");
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -27,7 +36,7 @@ const SignUp = () => {
           <p>기업명</p>
           <input
             onChange={onChangeInput}
-            name="compony"
+            name="compony_name"
             placeholder="기업명 입력해주세요"
           />
         </InputContainer>
@@ -35,7 +44,7 @@ const SignUp = () => {
           <p>id</p>
           <input
             onChange={onChangeInput}
-            name="id"
+            name="user_id"
             placeholder="id를 입력해주세요"
           />
         </InputContainer>
@@ -47,7 +56,9 @@ const SignUp = () => {
             placeholder="비밀번호를 입력해주세요"
           />
         </InputContainer>
-        <NextButton onClick={onClickSign}>회원가입</NextButton>
+        <NextButton type="button" onClick={onClickSign}>
+          회원가입
+        </NextButton>
       </SignWrapper>
     </SignContainer>
   );
@@ -61,7 +72,7 @@ const SignContainer = styled.div`
   justify-content: center;
 `;
 
-const SignWrapper = styled.form`
+const SignWrapper = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;

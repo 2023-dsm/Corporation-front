@@ -1,6 +1,49 @@
 import styled from "styled-components";
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Write = () => {
+  const navigate = useNavigate();
+  const [data, setData] = useState({
+    detail_work_area: "",
+    job_description: "",
+    week_work_time: "",
+    month_work_time: "",
+    money: 0,
+    manager: "",
+    close_date: "",
+  });
+
+  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    setData({ ...data, [name]: value });
+  };
+
+  const onChangeArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { value, name } = e.target;
+    setData({ ...data, [name]: value });
+  };
+
+  const onClickWrite = () => {
+    axios
+      .post(
+        "192.168.1.149:8080/recruitment/write/employment",
+        { ...data },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        alert("작성이 완료되었습니다.");
+        navigate("/main");
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Wrapper>
       <WriteContainer>
@@ -8,40 +51,68 @@ const Write = () => {
         <WriteWrapper>
           <InputContainer>
             <p>근무지역</p>
-            <input name="local" placeholder="근무지역을 입력해주세요" />
+            <input
+              onChange={onChangeInput}
+              name="detail_work_area"
+              placeholder="근무지역을 입력해주세요"
+            />
           </InputContainer>
           <InputAreaContainer>
             <p>직무내용</p>
-            <textarea name="content" placeholder="직무내용을 입력해주세요" />
+            <textarea
+              onChange={onChangeArea}
+              name="job_description"
+              placeholder="직무내용을 입력해주세요"
+            />
           </InputAreaContainer>
           <TimeContainer>
             <InputContainer>
               <p>주근무시간</p>
-              <input name="time" placeholder="주근무시간을 입력해주세요" />
-            </InputContainer>{" "}
+              <input
+                onChange={onChangeInput}
+                name="week_work_time"
+                placeholder="주근무시간을 입력해주세요"
+              />
+            </InputContainer>
             <InputContainer>
               <p>월근무시간</p>
-              <input name="time" placeholder="월근무시간을 입력해주세요" />
+              <input
+                onChange={onChangeInput}
+                name="month_work_time"
+                placeholder="월근무시간을 입력해주세요"
+              />
             </InputContainer>
           </TimeContainer>
           <EtcContainer>
             <InputContainer>
               <p>임금액</p>
-              <input name="money" placeholder="임금액을 입력해주세요" />
+              <input
+                onChange={onChangeInput}
+                name="money"
+                placeholder="임금액을 입력해주세요"
+              />
             </InputContainer>
             <InputContainer>
               <p>구인담당자</p>
-              <input name="people" placeholder="구인담당자를 입력해주세요" />
+              <input
+                onChange={onChangeInput}
+                name="manager"
+                placeholder="구인담당자를 입력해주세요"
+              />
             </InputContainer>
             <InputContainer>
               <p>접수 마감 일자</p>
-              <input name="local" placeholder="접수 마감 일자 입력해주세요" />
+              <input
+                onChange={onChangeInput}
+                name="close_date"
+                placeholder="접수 마감 일자 입력해주세요"
+              />
             </InputContainer>
           </EtcContainer>
         </WriteWrapper>
       </WriteContainer>
       <BtnDiv>
-        <NextButton>의뢰하기</NextButton>
+        <NextButton onClick={onClickWrite}>의뢰하기</NextButton>
       </BtnDiv>
     </Wrapper>
   );

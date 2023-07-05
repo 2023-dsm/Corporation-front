@@ -1,14 +1,21 @@
 import styled from "styled-components";
 
-const Block = () => {
+interface Applicate {
+  id: number;
+  name: string;
+  sex: string;
+  age: number;
+}
+
+const Block = ({ ...props }: Applicate) => {
   return (
     <Wrapper>
       <NameWrapper>
-        <p>남성</p>
+        <p>{props.sex}</p>
         <p className="line">|</p>
-        <p>김승진</p>
+        <p>{props.name}</p>
       </NameWrapper>
-      <p>65세</p>
+      <p>{props.age}세</p>
     </Wrapper>
   );
 };

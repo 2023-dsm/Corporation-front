@@ -1,6 +1,67 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+
+interface GetData {
+  name: string;
+  age: number;
+  address: string;
+  phone_number: string;
+  introduce: string;
+  career: string;
+}
 
 const Document = () => {
+  const [data, setData] = useState<GetData>({
+    address: "",
+    age: 0,
+    career: "",
+    introduce: "",
+    name: "",
+    phone_number: "",
+  });
+
+  let { id } = useParams();
+  const ID = String(id);
+
+  useEffect(() => {
+    axios
+      .get<GetData>(`http://192.168.1.149:8080/user/get/resume/${ID}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      })
+      .then((res) => {
+        setData({
+          address: res.data.address,
+          age: res.data.age,
+          career: res.data.career,
+          introduce: res.data.introduce,
+          name: res.data.name,
+          phone_number: res.data.phone_number,
+        });
+      });
+  }, []);
+
+  const onClickPatch = () => {
+    axios
+      .patch(
+        `http://192.168.1.149:8080/employment/deadline/${ID}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        alert("지원자의 면접을 진행합니다.");
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Wrapper>
       <DocumentContainer>
@@ -9,32 +70,27 @@ const Document = () => {
           <ApplicateInfoContainer>
             <div className="userInfo">
               <div className="name">
-                <h1>김승진</h1>
-                <p>65세</p>
+                <h1>{data.name}</h1>
+                <p>{data.age}세</p>
               </div>
-              <div className="address">강원도 정선군 남면 무릉1로 109</div>
+              <div className="address">{data.address}</div>
             </div>
             <div className="phone">
-              <p>82+01012345678</p>
+              <p>82+{data.phone_number}</p>
             </div>
           </ApplicateInfoContainer>
           <ContentContainer>
             <p>소개</p>
-            <p>
-              삼성전자에서 30년간 근무한 65세 김승진입니다. 잘 부탁드립니다.
-            </p>
+            <p>{data.introduce}</p>
           </ContentContainer>
           <CareerContainer>
             <p>경력 사항</p>
-            <p>
-              90.04.10 ~ 20.05.10 - 삼성전자 \n 90.04.10 ~ 20.05.10 - 90.04.10 ~
-              20.05.10 - 삼성전자 \n 90.04.10 ~ 20.05.10 -
-            </p>
+            <p>{data.career}</p>
           </CareerContainer>
         </DocumentWrapper>
       </DocumentContainer>
       <BtnDiv>
-        <NextButton>면접 보기</NextButton>
+        <NextButton onClick={onClickPatch}>면접 보기</NextButton>
       </BtnDiv>
     </Wrapper>
   );

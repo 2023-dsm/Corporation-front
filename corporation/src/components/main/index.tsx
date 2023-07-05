@@ -1,13 +1,42 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Block from "./Block";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+interface Applicate {
+  id: number;
+  name: string;
+  sex: string;
+  age: number;
+}
+
+interface CompanyGet {
+  application_list: Applicate[];
+}
 
 const Main = () => {
+  const [data, setData] = useState<Applicate[]>([]);
   const navigate = useNavigate();
 
   const onClickWrite = () => {
     navigate("/write");
   };
+
+  useEffect(() => {
+    axios
+      .get<CompanyGet>(`http://192.168.1.149:8080/employment/company`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      })
+      .then((res) => {
+        setData(res.data.application_list);
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <Wrapper>
@@ -19,14 +48,21 @@ const Main = () => {
         <WriteButton onClick={onClickWrite}>채용의뢰서 작성하기</WriteButton>
       </TitleContainer>
       <ApplicantList>
-        <Block />
-        <Block />
-        <Block />
-        <Block />
-        <Block />
-        <Block />
-        <Block />
-        <Block />
+        {Array.isArray(data) &&
+          data.map((item, idx) => (
+            <Link
+              style={{ textDecoration: "none", color: "black" }}
+              to={`/document/${item.id}`}
+            >
+              <Block
+                key={idx}
+                age={item.age}
+                id={item.id}
+                name={item.name}
+                sex={item.sex}
+              />
+            </Link>
+          ))}
       </ApplicantList>
     </Wrapper>
   );
