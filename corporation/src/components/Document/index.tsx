@@ -28,7 +28,7 @@ const Document = () => {
 
   useEffect(() => {
     axios
-      .get<GetData>(`http://192.168.1.149:8080/user/get/resume/${ID}`, {
+      .get<GetData>(`http://192.168.0.25:8080/user/get/resume/${ID}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -48,7 +48,7 @@ const Document = () => {
   const onClickPatch = () => {
     axios
       .patch(
-        `http://192.168.1.149:8080/employment/deadline/${ID}`,
+        `http://192.168.0.25:8080/employment/deadline/${ID}`,
         {},
         {
           headers: {

@@ -20,7 +20,7 @@ const SignUp = () => {
   const onClickSign = () => {
     console.log("1", signData);
     axios
-      .post("http://192.168.1.149:8080/company/signup", { ...signData })
+      .post("http://192.168.0.25:8080/company/signup", { ...signData })
       .then(() => {
         alert("회원가입에 성공하셨습니다.");
         navigate("/");

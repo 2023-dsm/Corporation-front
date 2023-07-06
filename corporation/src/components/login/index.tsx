@@ -23,7 +23,7 @@ const Login = () => {
 
   const onClickLogin = () => {
     axios
-      .post<ILogin>("http://192.168.1.149:8080/company/login", { ...loginData })
+      .post<ILogin>("http://192.168.0.25:8080/company/login", { ...loginData })
       .then((res) => {
         console.log(res);
         localStorage.setItem("access_token", res.data.access_token);

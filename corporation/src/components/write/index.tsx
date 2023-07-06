@@ -50,7 +50,7 @@ const Write = () => {
   const onClickWrite = () => {
     axios
       .post(
-        "http://192.168.1.149:8080/recruitment/write/employmentç",
+        "http://192.168.0.25:8080/recruitment/write/employmentç",
         { ...data },
         {
           headers: {

@@ -18,7 +18,7 @@ const Headers = () => {
 
   useEffect(() => {
     axios
-      .get<GetData>(`http://192.168.1.149:8080/company/info`, {
+      .get<GetData>(`http://192.168.0.25:8080/company/info`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },

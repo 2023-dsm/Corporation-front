@@ -26,7 +26,7 @@ const Main = () => {
 
   useEffect(() => {
     axios
-      .get<CompanyGet>(`http://192.168.1.149:8080/employment/company`, {
+      .get<CompanyGet>(`http://192.168.0.25:8080/employment/company`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
